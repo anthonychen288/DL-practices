@@ -15,7 +15,7 @@ def gradient_sigmoid(x):
 def trainNN(X, y, epochs=20000):
 	# Initialization
 	n_inputs, n_hidden_units, n_output_units = 2, 3, 1
-	hidden_weights = np.random.uniform(low=-1.0, high=1.0, size=(2, input_units+1))
+	hidden_weights = np.random.uniform(low=-1.0, high=1.0, size=(2, n_inputs+1))
 	output_weights = 2. * np.random.uniform(low=-1.0, high=1.0, size=3)
 	# add bias to X
 	n_data = len(X)
@@ -27,6 +27,7 @@ def trainNN(X, y, epochs=20000):
 	r = 0.1
 
 	for iter in range(epochs):
+
 		cost = 0.0
 		for n in range(n_data):
 
@@ -46,6 +47,9 @@ def trainNN(X, y, epochs=20000):
 			# update hidden layers
 			hidden_weights += r * np.outer(dCost_dh[:n_hidden_units-1] * \
 				gradient_sigmoid(hidden_layer[:n_hidden_units-1]), design_x[n])
+
+		if (iter%1000) == 0:
+			print("iter: %d\trate: %f, cost: %f" %(iter, r, cost))
 			
 	# final output
 	print("\tground truth\toutput")
@@ -55,7 +59,7 @@ def trainNN(X, y, epochs=20000):
 	output = sigmoid(H.dot(output_weights))
 
 	for i in range(n_data):
-		print(str(X[i])+"\t%f\t%.10f" %(y[i], output))
+		print(str(X[i])+"\t%f\t%.10f" %(y[i], output[i]))
 
 X = np.array([[0,0], [0,1], [1,0], [1,1]])
 y = np.array([0, 1, 1, 0])
